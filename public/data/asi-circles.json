@@ -1,0 +1,106 @@
+[
+  {
+    "circle": "Dharwad Circle",
+    "state": "Karnataka",
+    "monuments": 282,
+    "exp_cr": 9.57,
+    "fy": "2023-24",
+    "per_site_lakh": 3.39
+  },
+  {
+    "circle": "Chennai Circle",
+    "state": "Tamil Nadu & Puducherry",
+    "monuments": 257,
+    "exp_cr": 12.95,
+    "fy": "2023-24",
+    "per_site_lakh": 5.04
+  },
+  {
+    "circle": "Lucknow Circle",
+    "state": "Uttar Pradesh",
+    "monuments": 196,
+    "exp_cr": 16.93,
+    "fy": "2023-24",
+    "per_site_lakh": 8.64
+  },
+  {
+    "circle": "Bhopal Circle",
+    "state": "Madhya Pradesh",
+    "monuments": 183,
+    "exp_cr": 17.22,
+    "fy": "2023-24",
+    "per_site_lakh": 9.41
+  },
+  {
+    "circle": "Kolkata Circle",
+    "state": "West Bengal",
+    "monuments": 86,
+    "exp_cr": 9.1,
+    "fy": "2023-24",
+    "per_site_lakh": 10.58
+  },
+  {
+    "circle": "Guwahati Circle",
+    "state": "NE States",
+    "monuments": 70,
+    "exp_cr": 8.78,
+    "fy": "2023-24",
+    "per_site_lakh": 12.54
+  },
+  {
+    "circle": "Agra Circle",
+    "state": "Uttar Pradesh",
+    "monuments": 187,
+    "exp_cr": 23.52,
+    "fy": "2023-24",
+    "per_site_lakh": 12.58
+  },
+  {
+    "circle": "Bangalore & Hampi Circles",
+    "state": "Karnataka",
+    "monuments": 224,
+    "exp_cr": 29.59,
+    "fy": "2023-24",
+    "per_site_lakh": 13.21
+  },
+  {
+    "circle": "Mumbai Circle",
+    "state": "Maharashtra",
+    "monuments": 117,
+    "exp_cr": 15.56,
+    "fy": "2023-24",
+    "per_site_lakh": 13.3
+  },
+  {
+    "circle": "Jaipur Circle",
+    "state": "Rajasthan",
+    "monuments": 88,
+    "exp_cr": 12.75,
+    "fy": "2023-24",
+    "per_site_lakh": 14.49
+  },
+  {
+    "circle": "Delhi Circle",
+    "state": "NCT Delhi",
+    "monuments": 170,
+    "exp_cr": 36.14,
+    "fy": "2023-24",
+    "per_site_lakh": 21.26
+  },
+  {
+    "circle": "Patna Circle",
+    "state": "Bihar",
+    "monuments": 70,
+    "exp_cr": 16.0,
+    "fy": "2023-24",
+    "per_site_lakh": 22.86
+  },
+  {
+    "circle": "Hyderabad Circle",
+    "state": "Telangana",
+    "monuments": 8,
+    "exp_cr": 14.38,
+    "fy": "2023-24",
+    "per_site_lakh": 179.75
+  }
+]

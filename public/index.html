@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monument Map of India — Heritage &amp; Conservation Atlas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,400..800;1,400..700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="vendor/maplibre-gl.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="map"></div>
+
+  <button class="sidebar-reopen-btn hidden" id="reopen-sidebar-btn" aria-label="Open map search and controls">
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
+    <span>Monument Map of India</span>
+  </button>
+
+  <!-- Compact Top-Left Corner Control Card (Salient Controls Only) -->
+  <aside class="left-panel" id="left-panel" aria-label="Map info and filters">
+    <div class="left-panel-sticky">
+      <div class="brand-row">
+        <div class="title-stack">
+          <h1 class="brand-title">Monument Map of India</h1>
+          <span class="brand-sub" id="visible-count">4,408 government-recognized sites</span>
+        </div>
+        <button class="mini-close panel-collapse-btn" id="collapse-sidebar-btn" title="Minimize controls" aria-label="Minimize controls">✕</button>
+      </div>
+      <p class="brand-desc">Interactive map tracking funding allocations, restoration budgets and visitor footfall.</p>
+
+      <div class="quick-bar-row">
+        <button type="button" class="text-btn" id="toggle-filters-btn" aria-expanded="false" aria-controls="filters-drawer">Filters ▾</button>
+        <button type="button" class="text-btn" id="reset-view-btn" title="Center full map of India">Center map</button>
+      </div>
+    </div>
+
+    <div class="left-panel-body">
+      <div class="filters-drawer hidden" id="filters-drawer">
+        <details class="filter-group" open>
+          <summary>State or Territory</summary>
+          <select id="state-select" aria-label="Filter by state or union territory">
+            <option value="">All States &amp; Territories</option>
+          </select>
+        </details>
+
+        <div class="filter-toggle-card">
+          <div class="filter-toggle-copy">
+            <span class="filter-toggle-title">Photographed Sites Only</span>
+            <span class="filter-toggle-sub">Hide satellite-only sites without archive photos</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-photos" aria-label="Photographed sites only" />
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+
+        <div class="filter-toggle-card">
+          <div class="filter-toggle-copy">
+            <span class="filter-toggle-title">Contested Territory Border</span>
+            <span class="filter-toggle-sub">Display Survey of India claim boundaries</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-contested" checked aria-label="Show contested territory boundaries" />
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+
+        <div class="secondary-actions">
+          <button type="button" class="text-btn" id="toggle-budgets-btn" title="ASI Circle conservation budgets">Circle Budgets</button>
+          <button type="button" class="text-btn" id="toggle-sources-btn" title="Data provenance &amp; attribution">Data Sources</button>
+        </div>
+
+        <!-- Collapsible Data Provenance & Attribution Panel -->
+        <div class="budget-panel hidden" id="sources-panel">
+          <div class="budget-panel-head">
+            <span>Verified Public Data Sources</span>
+            <button class="mini-close" id="close-sources-btn" aria-label="Close sources panel">✕</button>
+          </div>
+          <div class="sources-list">
+            <div><b>4,408 ASI Sites:</b> Wikidata (P1435 / P11653), Wikipedia &amp; Wikimedia Commons.</div>
+            <div><b>Upkeep &amp; Heritage:</b> UNESCO World Heritage API, Adopt a Heritage 2.0, Ministry of Tourism PRASHAD &amp; PIB FY 2023–24 circle budgets.</div>
+            <div><b>Geography:</b> DataMeet Survey of India &amp; contested boundary overlays, Natural Earth 10m hydrography, OpenFreeMap place labels.</div>
+          </div>
+        </div>
+
+        <!-- Collapsible ASI Circle Conservation Budget Panel -->
+        <div class="budget-panel hidden" id="budget-panel">
+          <div class="budget-panel-head">
+            <span>ASI Circle Spend per Monument (FY 2023–24)</span>
+            <button class="mini-close" id="close-budgets-btn" aria-label="Close budget panel">✕</button>
+          </div>
+          <div class="budget-list" id="budget-list"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Compact Horizontal Bottom-Left Toggleable Category Pills -->
+  <div class="legend-bar scrolled-start" id="legend-bar-wrap">
+    <button type="button" class="legend-scroll-hint legend-scroll-left" id="legend-scroll-left" aria-label="Scroll categories left" title="Scroll back"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg></button>
+    <div class="legend-track" id="legend-bar" role="group" aria-label="Filter monuments by category">
+      <button type="button" class="legend-btn active" data-legend-filter="all" aria-pressed="true" title="Show all ASI and PRASHAD sites">All</button>
+      <button type="button" class="legend-btn" data-legend-filter="unesco" aria-pressed="false" title="Toggle UNESCO World Heritage sites">
+        <i class="dot dot-unesco"></i>UNESCO
+      </button>
+      <button type="button" class="legend-btn" data-legend-filter="footfall" aria-pressed="false" title="Toggle ASI ticketed revenue &amp; high-footfall monuments">
+        <i class="dot dot-footfall"></i>Ticketed
+      </button>
+      <button type="button" class="legend-btn" data-legend-filter="mostvisited" aria-pressed="false" title="Toggle the Top 20 most-visited landmarks across India">
+        <i class="dot dot-footfall"></i>Most Visited
+      </button>
+      <button type="button" class="legend-btn" data-legend-filter="adopt" aria-pressed="false" title="Toggle Private/CSR Heritage Adoption sites">
+        <i class="dot dot-adopt"></i>Heritage Adoption
+      </button>
+      <button type="button" class="legend-btn" data-legend-filter="prashad" aria-pressed="false" title="Toggle Ministry of Tourism PRASHAD heritage projects">
+        <i class="dot dot-prashad"></i>PRASHAD
+      </button>
+      <button type="button" class="legend-btn" data-legend-filter="restoration" aria-pressed="false" title="Toggle monuments undergoing active restoration, conservation, or ongoing PRASHAD works">
+        <i class="dot dot-restoration"></i>In Restoration
+      </button>
+      <button type="button" class="legend-btn" data-legend-filter="underfunded" aria-pressed="false" title="Toggle underfunded ASI circle monuments (&lt; ₹8.5L/site)">
+        <i class="dot dot-underfunded"></i>Underfunded
+      </button>
+      <button type="button" class="legend-btn" data-legend-filter="uncovered" aria-pressed="false" title="Toggle poorly covered / under-photographed sites with no archive photo yet">
+        <span class="legend-excl" aria-hidden="true">!</span>Poorly Covered
+      </button>
+      <button type="button" class="legend-btn" data-legend-filter="asi" aria-pressed="false" title="Toggle standard Government-Recognized Monuments">
+        <i class="dot dot-asi"></i>ASI Site
+      </button>
+    </div>
+    <button type="button" class="legend-scroll-hint" id="legend-scroll-hint" aria-label="Scroll more categories" title="Scroll categories"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
+  </div>
+
+  <!-- Minimal slide-in inspector card -->
+  <aside class="detail-drawer hidden" id="detail-drawer" aria-live="polite">
+    <div class="detail-drawer-chrome">
+      <div id="drawer-nearby-slot" class="drawer-nearby-slot"></div>
+      <button class="close-btn" id="close-drawer" aria-label="Close details">✕</button>
+    </div>
+    <div id="detail-content"></div>
+  </aside>
+
+  <!-- Expandable Top-Right Search Icon & Popover -->
+  <div class="search-dock" id="search-dock">
+    <button
+      type="button"
+      class="search-icon-btn"
+      id="search-toggle-btn"
+      aria-label="Open monument search (/)"
+      aria-expanded="false"
+      aria-controls="search-wrap"
+      title="Search monuments (/)"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7.5"></circle>
+        <path d="M20 20l-4.2-4.2"></path>
+      </svg>
+    </button>
+
+    <div class="search-wrap hidden" id="search-wrap">
+      <div class="search-input-row">
+        <svg class="search-field-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7.5"></circle>
+          <path d="M20 20l-4.2-4.2"></path>
+        </svg>
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Search monument, city, or state (/)"
+          autocomplete="off"
+          aria-autocomplete="list"
+          aria-controls="search-dropdown"
+          aria-expanded="false"
+        />
+        <button type="button" class="mini-close search-close-btn" id="search-close-btn" aria-label="Close and clear search" title="Close search">✕</button>
+      </div>
+      <div class="search-dropdown hidden" id="search-dropdown" role="listbox"></div>
+    </div>
+  </div>
+
+  <!-- Minimal hover preview card with thumbnail -->
+  <div class="map-tooltip hidden" id="tooltip"></div>
+
+  <script src="vendor/maplibre-gl.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
